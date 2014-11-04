@@ -1,12 +1,25 @@
-var loadsvg = require('load-svg');
 var createElement = require('svg-create-element');
 var rgb = require('rgb');
 var simplify = require('simplify-geometry');
 var slideways = require('slideways');
 
-loadsvg('spiral.svg', function (err, svg) {
-    svg.setAttribute('width', '100%');
-    svg.setAttribute('height', '100%');
+var box = document.querySelector('#box');
+var upload = document.querySelector('#upload');
+
+upload.addEventListener('change', function (ev) {
+    var reader = new FileReader;
+    reader.addEventListener('load', function (e) {
+        var div = document.createElement('div');
+        div.innerHTML = e.target.result;
+        var svg = div.querySelector('svg');
+        loadsvg(svg);
+    });
+    reader.readAsText(upload.files[0]);
+});
+
+function loadsvg (svg) {
+    box.innerHTML = '';
+    
     var p = svg.querySelector('path');
     var pcopy = p.cloneNode(true);
     p.parentNode.insertBefore(pcopy, p);
@@ -14,15 +27,20 @@ loadsvg('spiral.svg', function (err, svg) {
     
     var points = [];
     var len = p.getTotalLength();
-    var segments = 50;
+    var segments = 100;
     for (var i = 0; i < segments; i++) {
         var pt = p.getPointAtLength(i / (segments - 1) * len);
         points.push([ pt.x, pt.y ]);
     }
     
-    var slider = slideways({ min: 0, max: 10, snap: 1, init: 5 });
+    var slider = slideways({ min: 0, max: 10, snap: 0.5, init: 3 });
+    
     var circles = [];
-    slider.appendTo(document.body);
+    var controls = document.createElement('div');
+    slider.appendTo(controls);
+    box.appendChild(controls);
+    
+    slider.element.style.width = 400;
     
     slider.on('value', function (value) {
         clear();
@@ -33,10 +51,10 @@ loadsvg('spiral.svg', function (err, svg) {
         });
         pcopy.setAttribute('d', 'M ' + simplified.join(' L '));
     });
-    document.body.appendChild(svg);
+    box.appendChild(svg);
     
     function clear () {
-        circles.forEach(function (c) { svg.removeChild(c) });
+        circles.forEach(function (c) { c.parentNode.removeChild(c) });
         circles = [];
     }
         
@@ -46,11 +64,11 @@ loadsvg('spiral.svg', function (err, svg) {
             fill: 'magenta'
         });
         circles.push(c);
-        svg.appendChild(c);
+        pcopy.parentNode.appendChild(c);
     }
     function dist (a, b) {
         var x = a[0] - b[0];
         var y = a[1] - b[1];
         return Math.sqrt(x*x + y*y);
     }
-});
+}
