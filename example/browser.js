@@ -19,8 +19,13 @@ upload.addEventListener('change', function (ev) {
 
 function loadsvg (svg) {
     box.innerHTML = '';
-    
-    var p = svg.querySelector('path');
+    var paths = svg.querySelectorAll('path');
+    for (var i = 0; i < paths.length; i++) {
+        drawPath(svg, paths[i]);
+    }
+}
+
+function drawPath (svg, p) {
     var pcopy = p.cloneNode(true);
     p.parentNode.insertBefore(pcopy, p);
     p.parentNode.removeChild(p);
