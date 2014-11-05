@@ -1,0 +1,35 @@
+{
+  "name": "svg-linearize",
+  "version": "1.0.0",
+  "description": "turn curved svg paths into paths with only line segments",
+  "main": "index.js",
+  "dependencies": {
+    "defined": "~0.0.0",
+    "simplify-geometry": "~0.0.1",
+    "svg-create-element": "~1.0.0"
+  },
+  "devDependencies": {
+    "tape": "^3.0.0"
+  },
+  "scripts": {
+    "test": "tape test/*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/substack/svg-linearize.git"
+  },
+  "homepage": "https://github.com/substack/svg-linearize",
+  "keywords": [
+    "browser",
+    "svg",
+    "line",
+    "segment",
+    "curve"
+  ],
+  "author": {
+    "name": "James Halliday",
+    "email": "mail@substack.net",
+    "url": "http://substack.net"
+  },
+  "license": "MIT"
+}
