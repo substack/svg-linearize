@@ -1,7 +1,7 @@
 var upload = document.querySelector('#upload');
 var target = document.querySelector('#target');
 
-var linearize = require('../');
+var linearize = require('../../');
 var nsvg;
 
 upload.addEventListener('change', function (ev) {

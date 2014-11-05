@@ -5,18 +5,15 @@ var defined = require('defined');
 module.exports = function (svg, opts) {
     if (!opts) opts = {};
     
-    var nsvg = createElement('svg');
-    var paths = svg.querySelectorAll('path');
+    var nsvg = svg.cloneNode(true);
+    var paths = nsvg.querySelectorAll('path');
     
     for (var i = 0; i < paths.length; i++) {
-        var pts = getPoints(paths[i], defined(opts.segments, 100));
-        var d = simplify(pts, defined(opts.tolerance, 3));
+        var p = paths[i];
+        var pts = getPoints(p, defined(opts.segments, 100));
         
-        nsvg.appendChild(createElement('path', {
-            stroke: 'black',
-            fill: 'transparent',
-            d: 'M ' + d.join(' L ')
-        }));
+        var d = simplify(pts, defined(opts.tolerance, 3));
+        p.setAttribute('d', 'M ' + d.join(' L '));
     }
     return nsvg;
 };
