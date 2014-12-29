@@ -1,6 +1,6 @@
 {
   "name": "svg-linearize",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "turn curved svg paths into paths with only line segments",
   "main": "index.js",
   "dependencies": {
