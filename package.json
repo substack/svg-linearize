@@ -4,7 +4,9 @@
   "description": "turn curved svg paths into paths with only line segments",
   "main": "index.js",
   "dependencies": {
+    "abs-svg-path": "~0.1.1",
     "defined": "~0.0.0",
+    "parse-svg-path": "~0.1.1",
     "simplify-geometry": "~0.0.1",
     "svg-create-element": "~1.0.0"
   },
