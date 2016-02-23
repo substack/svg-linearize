@@ -16,7 +16,7 @@ module.exports = function (svg, opts) {
         var abs = absPath(parsePath(d)).map(unsplit).join(' ');
         var parts = abs.match(/([^z]+(?:z\s*|$))/ig);
         for (var j = 0; j < parts.length; j++) {
-            var el = createElement('path');
+            var el = opts.preserveAttributes ? pre.cloneNode('path') : createElement('path');
             el.setAttribute('d', parts[j]);
             pre.parentNode.appendChild(el);
             paths.push(el);
