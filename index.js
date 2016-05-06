@@ -13,6 +13,8 @@ module.exports = function (svg, opts) {
     for (var i = 0; i < prepaths.length; i++) {
         var pre = prepaths[i];
         var d = pre.getAttribute('d');
+        if (!containsNonLinearParts(d))
+            continue;
         var abs = absPath(parsePath(d)).map(unsplit).join(' ');
         var parts = abs.match(/([^z]+(?:z\s*|$))/ig);
         for (var j = 0; j < parts.length; j++) {
@@ -33,6 +35,10 @@ module.exports = function (svg, opts) {
     }
     return nsvg;
 };
+
+function containsNonLinearParts (d) {
+    return d.match(/[CcSsQqTtAa]+/) !== null;
+}
 
 function unsplit (xs) { return xs.join(' ') }
 
