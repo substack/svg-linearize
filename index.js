@@ -13,6 +13,7 @@ module.exports = function (svg, opts) {
     for (var i = 0; i < prepaths.length; i++) {
         var pre = prepaths[i];
         var d = pre.getAttribute('d');
+        var t = pre.getAttribute('transform');
         if (!containsNonLinearParts(d))
             continue;
         var abs = absPath(parsePath(d)).map(unsplit).join(' ');
@@ -20,6 +21,7 @@ module.exports = function (svg, opts) {
         for (var j = 0; j < parts.length; j++) {
             var el = createElement('path');
             el.setAttribute('d', parts[j]);
+            el.setAttribute('transform', t);
             pre.parentNode.appendChild(el);
             paths.push(el);
         }
