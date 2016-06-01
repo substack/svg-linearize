@@ -3,6 +3,7 @@ var simplify = require('simplify-geometry');
 var defined = require('defined');
 var absPath = require('abs-svg-path');
 var parsePath = require('parse-svg-path');
+require('./path-data-polyfill');
 
 module.exports = function (svg, opts) {
     if (!opts) opts = {};
@@ -32,7 +33,7 @@ module.exports = function (svg, opts) {
         var p = paths[i];
         var numberOfPoints = defined(opts.segments, 100);
         if (opts.segmentLength !== undefined)
-            numberOfPoints = p.getTotalLength() / opts.segmentLength
+            numberOfPoints = p.getTotalLength() / opts.segmentLength;
         var pts = getPoints(p, numberOfPoints);
         
         var d = simplify(pts, defined(opts.tolerance, 3));
@@ -49,9 +50,19 @@ function unsplit (xs) { return xs.join(' ') }
 
 function getPoints (p, segments) {
     var len = p.getTotalLength();
+    var pathData = p.getPathData();
     var points = [];
+    var lastSeg = null;
     for (var i = 0; i < segments; i++) {
-        var pt = p.getPointAtLength(i / (segments - 1) * len);
+        var atLength = i / (segments - 1) * len;
+        var seg = p.getPathSegAtLength(atLength);
+        if (seg !== lastSeg) {
+            lastSegData = pathData[lastSeg];
+            lastSeg = seg;
+            if (lastSegData != undefined && lastSegData.type === 'lineto')
+                points.push([ lastSegData.values[0], lastSegData.values[1] ]);
+        }
+        var pt = p.getPointAtLength(atLength);
         points.push([ pt.x, pt.y ]);
     }
     return points;
