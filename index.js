@@ -30,7 +30,10 @@ module.exports = function (svg, opts) {
     
     for (var i = 0; i < paths.length; i++) {
         var p = paths[i];
-        var pts = getPoints(p, defined(opts.segments, 100));
+        var numberOfPoints = defined(opts.segments, 100);
+        if (opts.segmentLength !== undefined)
+            numberOfPoints = p.getTotalLength() / opts.segmentLength
+        var pts = getPoints(p, numberOfPoints);
         
         var d = simplify(pts, defined(opts.tolerance, 3));
         p.setAttribute('d', 'M ' + d.join(' L '));
